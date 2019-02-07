@@ -13,7 +13,7 @@ import os
 
 class Trainer(object):
     def __init__(self, type, dataset, split, lr, diter, vis_screen, save_path, l1_coef, l2_coef, pre_trained_gen, pre_trained_disc, batch_size, num_workers, epochs):
-        with open('config.yaml', 'r') as f:
+        with open('/home/s1819116/Text-to-Image-Synthesis/config.yaml', 'r') as f:
             config = yaml.load(f)
 
         self.generator = torch.nn.DataParallel(gan_factory.generator_factory(type).cuda())

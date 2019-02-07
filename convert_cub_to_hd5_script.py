@@ -1,9 +1,11 @@
+# -*- coding: utf-8 -*-
 import os
 from os.path import join, isfile
 import numpy as np
 import h5py
 from glob import glob
-from torch.utils.serialization import load_lua  
+import torch
+import torchfile
 from PIL import Image 
 import yaml
 import io
@@ -38,17 +40,18 @@ for _class in sorted(os.listdir(embedding_path)):
 	data_path = os.path.join(embedding_path, _class)
 	txt_path = os.path.join(text_path, _class)
 	for example, txt_file in zip(sorted(glob(data_path + "/*.t7")), sorted(glob(txt_path + "/*.txt"))):
-		example_data = load_lua(example)
-		img_path = example_data['img']
-		embeddings = example_data['txt'].numpy()
+		example_data = torchfile.load(example)
+		#print(example_data)
+		img_path = example_data[b'img']
+		embeddings = example_data[b'txt']
 		example_name = img_path.split('/')[-1][:-4]
 
 		f = open(txt_file, "r")
 		txt = f.readlines()
 		f.close()
 
-		img_path = os.path.join(images_path, img_path)
-		img = open(img_path, 'rb').read()
+		img_path = str(os.path.join(images_path, img_path).encode('utf-8'))
+		img = open(img_path, 'r').read()
 
 		txt_choice = np.random.choice(range(10), 5)
 

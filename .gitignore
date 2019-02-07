@@ -1,3 +1,4 @@
+data/*
 pre-trained models/*
 dataset/*
 *.pyc
