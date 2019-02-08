@@ -42,16 +42,18 @@ for _class in sorted(os.listdir(embedding_path)):
 	for example, txt_file in zip(sorted(glob(data_path + "/*.t7")), sorted(glob(txt_path + "/*.txt"))):
 		example_data = torchfile.load(example)
 		#print(example_data)
-		img_path = example_data[b'img']
+		img_path = example_data[b'img'].decode("utf-8")
+		print(img_path)
 		embeddings = example_data[b'txt']
-		example_name = img_path.split('/')[-1][:-4]
+		example_name = str(img_path).split('/')[-1][:-4]
+		print(example_name)
 
 		f = open(txt_file, "r")
 		txt = f.readlines()
 		f.close()
 
-		img_path = str(os.path.join(images_path, img_path).encode('utf-8'))
-		img = open(img_path, 'r').read()
+		img_path = str(os.path.join(images_path, img_path))
+		img = open(img_path, 'rb').read()
 
 		txt_choice = np.random.choice(range(10), 5)
 

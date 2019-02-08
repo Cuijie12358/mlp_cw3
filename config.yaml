@@ -1,11 +1,11 @@
 # Birds CUB dataset
-birds_images_path: '/home/s1819116/Text-to-Image-Synthesis/data/bird/CUB_200_2011/images/'
-birds_embedding_path: '/home/s1819116/Text-to-Image-Synthesis/data/bird/cub_icml/'
-birds_text_path: '/home/s1819116/Text-to-Image-Synthesis/data/bird/text_c10/'
-birds_dataset_path: '/home/s1819116/Text-to-Image-Synthesis/data/birds.hdf5'
-val_split_path: '/home/s1819116/Text-to-Image-Synthesis/data/bird/cub_icml/valclasses.txt'
-train_split_path: '/home/s1819116/Text-to-Image-Synthesis/data/bird/cub_icml/trainclasses.txt'
-test_split_path: '/home/s1819116/Text-to-Image-Synthesis/data/bird/cub_icml/testclasses.txt'
+birds_images_path: '/Users/cuijie/projects_of_myself/mlp_cw3/data/bird/CUB_200_2011/images/'
+birds_embedding_path: '/Users/cuijie/projects_of_myself/mlp_cw3/data/bird/cub_icml/'
+birds_text_path: '/Users/cuijie/projects_of_myself/mlp_cw3/data/bird/text_c10/'
+birds_dataset_path: '/Users/cuijie/projects_of_myself/mlp_cw3/data/birds.hdf5'
+val_split_path: '/Users/cuijie/projects_of_myself/mlp_cw3/data/bird/cub_icml/valclasses.txt'
+train_split_path: '/Users/cuijie/projects_of_myself/mlp_cw3/data/bird/cub_icml/trainclasses.txt'
+test_split_path: '/Users/cuijie/projects_of_myself/mlp_cw3/data/bird/cub_icml/testclasses.txt'
 
 
 # flowers dataset

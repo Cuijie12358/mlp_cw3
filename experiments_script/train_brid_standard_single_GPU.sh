@@ -33,5 +33,5 @@ export TMP=/disk/scratch/${STUDENT_ID}/
 
 source /home/${STUDENT_ID}/miniconda3/bin/activate mlp
 cd ..
-python /home/s1819116/Text-to-Image-Synthesis/runtime.py --dataset 'birds' --save_path '/home/s1819116/Text-to-Image-Synthesis/models/birds/' 
+python /home/s1819116/Text-to-Image-Synthesis/runtime.py --dataset 'birds' --save_path '/Users/cuijie/projects_of_myself/mlp_cw3/models/birds' 
 
