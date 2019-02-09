@@ -5,4 +5,4 @@ dataset/*
 .idea/
 checkpoints/*
 results/*
-model/bird/*
+models/birds/*

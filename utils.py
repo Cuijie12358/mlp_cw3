@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from torch import nn
 from torch import  autograd
 import torch
@@ -138,6 +139,36 @@ class Logger(object):
         self.hist_G = []
         self.hist_Dx = []
         self.hist_DGx = []
+
+    # Plot the change in the Discriminator and generator error over training.
+        fig_1 = plt.figure(figsize=(8, 4))
+        ax_1 = fig_1.add_subplot(111)
+        ax_1.plot(epoch, np.array(self.hist_D).mean())
+        ax_1.legend('train')
+        ax_1.set_title('Discriminator')
+        fig_1.savefig('models/birds/Discriminator_train.pdf')
+
+        fig_2 = plt.figure(figsize=(8, 4))
+        ax_2 = fig_2.add_subplot(111)
+        ax_2.plot(epoch, np.array(self.hist_G).mean())
+        ax_2.legend('train')
+        ax_2.set_title('Generator')
+        fig_2.savefig('models/birds/Generator_train.pdf')
+
+        fig_3 = plt.figure(figsize=(8, 4))
+        ax_3 = fig_3.add_subplot(111)
+        ax_3.plot(epoch, np.array(self.hist_Dx).mean())
+        ax_3.legend('train')
+        ax_3.set_title('D(X)')
+        gif_3.savefig('models/birds/D(X)_train.pdf')
+
+        fig_4 = plt.figure(figsize=(8, 4))
+        ax_4 = fig_4.add_subplot(111)
+        ax_4.plot(epoch, np.array(self.hist_DGx).mean())
+        ax_4.legend('train')
+        ax_4.set_title('D(G(X))')
+        gif_4.savefig('models/birds/D(G(X))_train.pdf')
+
 
     def draw(self, right_images, fake_images):
         self.viz.draw('generated images', fake_images.data.cpu().numpy()[:64] * 128 + 128)
