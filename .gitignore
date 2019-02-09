@@ -6,3 +6,5 @@ dataset/*
 checkpoints/*
 results/*
 models/birds/*
+.DS_Store
+models/.DS_Store
