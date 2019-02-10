@@ -1,8 +1,9 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from torch import nn
 from torch import  autograd
 import torch
-from visualize import VisdomPlotter
+#from visualize import VisdomPlotter
 import os
 import pdb
 
@@ -102,7 +103,7 @@ class Utils(object):
 
 class Logger(object):
     def __init__(self, vis_screen):
-        self.viz = VisdomPlotter(env_name=vis_screen)
+       # self.viz = VisdomPlotter(env_name=vis_screen)
         self.hist_D = []
         self.hist_G = []
         self.hist_Dx = []
@@ -124,21 +125,58 @@ class Logger(object):
         self.hist_DGx.append(fake_score.data.cpu().mean())
 
     def plot_epoch(self, epoch):
-        self.viz.plot('Discriminator', 'train', epoch, np.array(self.hist_D).mean())
-        self.viz.plot('Generator', 'train', epoch, np.array(self.hist_G).mean())
+        #self.viz.plot('Discriminator', 'train', epoch, np.array(self.hist_D).mean())
+        #self.viz.plot('Generator', 'train', epoch, np.array(self.hist_G).mean())
         self.hist_D = []
         self.hist_G = []
 
     def plot_epoch_w_scores(self, epoch):
-        self.viz.plot('Discriminator', 'train', epoch, np.array(self.hist_D).mean())
-        self.viz.plot('Generator', 'train', epoch, np.array(self.hist_G).mean())
-        self.viz.plot('D(X)', 'train', epoch, np.array(self.hist_Dx).mean())
-        self.viz.plot('D(G(X))', 'train', epoch, np.array(self.hist_DGx).mean())
+        #self.viz.plot('Discriminator', 'train', epoch, np.array(self.hist_D).mean())
+        #self.viz.plot('Generator', 'train', epoch, np.array(self.hist_G).mean())
+        #self.viz.plot('D(X)', 'train', epoch, np.array(self.hist_Dx).mean())
+        #self.viz.plot('D(G(X))', 'train', epoch, np.array(self.hist_DGx).mean())
         self.hist_D = []
         self.hist_G = []
         self.hist_Dx = []
         self.hist_DGx = []
 
-    def draw(self, right_images, fake_images):
-        self.viz.draw('generated images', fake_images.data.cpu().numpy()[:64] * 128 + 128)
-        self.viz.draw('real images', right_images.data.cpu().numpy()[:64] * 128 + 128)
+    # Plot the change in the Discriminator and generator error over training.
+        fig_1 = plt.figure(figsize=(8, 4))
+        ax_1 = fig_1.add_subplot(111)
+        ax_1.plot(epoch, np.array(self.hist_D).mean())
+        ax_1.legend('train')
+        ax_1.set_title('Discriminator')
+        fig_1.savefig('/home/s1819116/Text-to-Image-Synthesis/models/birds/Discriminator_train.pdf')
+
+        fig_2 = plt.figure(figsize=(8, 4))
+        ax_2 = fig_2.add_subplot(111)
+        ax_2.plot(epoch, np.array(self.hist_G).mean())
+        ax_2.legend('train')
+        ax_2.set_title('Generator')
+        fig_2.savefig('/home/s1819116/Text-to-Image-Synthesis/models/birds/Generator_train.pdf')
+
+        fig_3 = plt.figure(figsize=(8, 4))
+        ax_3 = fig_3.add_subplot(111)
+        ax_3.plot(epoch, np.array(self.hist_Dx).mean())
+        ax_3.legend('train')
+        ax_3.set_title('D(X)')
+        fig_3.savefig('/home/s1819116/Text-to-Image-Synthesis/models/birds/D(X)_train.pdf')
+
+        fig_4 = plt.figure(figsize=(8, 4))
+        ax_4 = fig_4.add_subplot(111)
+        ax_4.plot(epoch, np.array(self.hist_DGx).mean())
+        ax_4.legend('train')
+        ax_4.set_title('D(G(X))')
+        fig_4.savefig('/home/s1819116/Text-to-Image-Synthesis/models/birds/D(G(X))_train.pdf')
+
+    def draw(self, right_images, fake_images,epoch):
+        #self.viz.draw('generated images', fake_images.data.cpu().numpy()[:64] * 128 + 128)
+        #self.viz.draw('real images', right_images.data.cpu().numpy()[:64] * 128 + 128)
+        fake_images_plt_1 = np.concatenate(np.split(fake_images.data.cpu().numpy()[:64],fake_images.data.cpu().numpy()[:64].shape[0],axis=0),axis=3)
+        fake_images_plt = np.transpose(np.reshape(np.concatenate(np.split(fake_images_plt_1,8,axis=3),axis=2),(3,512,512)),(1,2,0))
+        plt.imsave('/home/s1819116/Text-to-Image-Synthesis/models/birds/fake_images_'+str(epoch)+'.png',(fake_images_plt*128+128).astype(np.uint8))
+
+
+        right_images_plt_1 = np.concatenate(np.split(right_images.data.cpu().numpy()[:64],right_images.data.cpu().numpy()[:64].shape[0],axis=0),axis=3)
+        right_images_plt = np.transpose(np.reshape(np.concatenate(np.split(right_images_plt_1,8,axis=3),axis=2),(3,512,512)),(1,2,0))
+        plt.imsave('/home/s1819116/Text-to-Image-Synthesis/models/birds/real_images_'+str(epoch)+'.png',(right_images_plt*128+128).astype(np.uint8))
