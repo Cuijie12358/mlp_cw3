@@ -161,7 +161,7 @@ class Trainer(object):
 
                 gen_iteration += 1
 
-                self.logger.draw(right_images, fake_images)
+                self.logger.draw(right_images, fake_images,epoch)
                 self.logger.log_iteration_wgan(epoch, gen_iteration, d_loss, g_loss, real_loss, fake_loss)
                 
             self.logger.plot_epoch(gen_iteration)
@@ -253,7 +253,7 @@ class Trainer(object):
 
                 if iteration % 5 == 0:
                     self.logger.log_iteration_gan(epoch,d_loss, g_loss, real_score, fake_score)
-                    self.logger.draw(right_images, fake_images)
+                    self.logger.draw(right_images, fake_images, epoch)
 
             self.logger.plot_epoch_w_scores(epoch)
 
@@ -333,7 +333,7 @@ class Trainer(object):
 
              gen_iteration += 1
 
-             self.logger.draw(right_images, fake_images)
+             self.logger.draw(right_images, fake_images,epoch)
              self.logger.log_iteration_wgan(epoch, gen_iteration, d_loss, g_loss, real_loss, fake_loss)
 
          self.logger.plot_epoch(gen_iteration)
@@ -412,7 +412,7 @@ class Trainer(object):
 
                 if iteration % 5 == 0:
                     self.logger.log_iteration_gan(epoch, d_loss, g_loss, real_score, fake_score)
-                    self.logger.draw(right_images, fake_images)
+                    self.logger.draw(right_images, fake_images,epoch)
 
             self.logger.plot_epoch_w_scores(iteration)
 
@@ -436,7 +436,7 @@ class Trainer(object):
             noise = noise.view(noise.size(0), 100, 1, 1)
             fake_images = self.generator(right_embed, noise)
 
-            self.logger.draw(right_images, fake_images)
+            self.logger.draw(right_images, fake_images,epoch)
 
             for image, t in zip(fake_images, txt):
                 im = Image.fromarray(image.data.mul_(127.5).add_(127.5).byte().permute(1, 2, 0).cpu().numpy())

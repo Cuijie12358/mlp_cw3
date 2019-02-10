@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from torch import nn
 from torch import  autograd
 import torch
-from visualize import VisdomPlotter
+# from visualize import VisdomPlotter
 import os
 import pdb
 
@@ -103,7 +103,7 @@ class Utils(object):
 
 class Logger(object):
     def __init__(self, vis_screen):
-        self.viz = VisdomPlotter(env_name=vis_screen)
+        # self.viz = VisdomPlotter(env_name=vis_screen)
         self.hist_D = []
         self.hist_G = []
         self.hist_Dx = []
@@ -125,16 +125,16 @@ class Logger(object):
         self.hist_DGx.append(fake_score.data.cpu().mean())
 
     def plot_epoch(self, epoch):
-        self.viz.plot('Discriminator', 'train', epoch, np.array(self.hist_D).mean())
-        self.viz.plot('Generator', 'train', epoch, np.array(self.hist_G).mean())
+        # self.viz.plot('Discriminator', 'train', epoch, np.array(self.hist_D).mean())
+        # self.viz.plot('Generator', 'train', epoch, np.array(self.hist_G).mean())
         self.hist_D = []
         self.hist_G = []
 
     def plot_epoch_w_scores(self, epoch):
-        self.viz.plot('Discriminator', 'train', epoch, np.array(self.hist_D).mean())
-        self.viz.plot('Generator', 'train', epoch, np.array(self.hist_G).mean())
-        self.viz.plot('D(X)', 'train', epoch, np.array(self.hist_Dx).mean())
-        self.viz.plot('D(G(X))', 'train', epoch, np.array(self.hist_DGx).mean())
+        # self.viz.plot('Discriminator', 'train', epoch, np.array(self.hist_D).mean())
+        # self.viz.plot('Generator', 'train', epoch, np.array(self.hist_G).mean())
+        # self.viz.plot('D(X)', 'train', epoch, np.array(self.hist_Dx).mean())
+        # self.viz.plot('D(G(X))', 'train', epoch, np.array(self.hist_DGx).mean())
         self.hist_D = []
         self.hist_G = []
         self.hist_Dx = []
@@ -160,16 +160,42 @@ class Logger(object):
         ax_3.plot(epoch, np.array(self.hist_Dx).mean())
         ax_3.legend('train')
         ax_3.set_title('D(X)')
-        gif_3.savefig('models/birds/D(X)_train.pdf')
+        fig_3.savefig('models/birds/D(X)_train.pdf')
 
         fig_4 = plt.figure(figsize=(8, 4))
         ax_4 = fig_4.add_subplot(111)
         ax_4.plot(epoch, np.array(self.hist_DGx).mean())
         ax_4.legend('train')
         ax_4.set_title('D(G(X))')
-        gif_4.savefig('models/birds/D(G(X))_train.pdf')
+        fig_4.savefig('models/birds/D(G(X))_train.pdf')
 
 
-    def draw(self, right_images, fake_images):
-        self.viz.draw('generated images', fake_images.data.cpu().numpy()[:64] * 128 + 128)
-        self.viz.draw('real images', right_images.data.cpu().numpy()[:64] * 128 + 128)
+    def draw(self, right_images, fake_images, epoch):
+        # self.viz.draw('generated images', fake_images.data.cpu().numpy()[:64] * 128 + 128)
+        # print(fake_images.data.cpu().numpy()[:64].shape)
+        print(fake_images.data.cpu().numpy()[:64])
+        print(right_images_plt)
+        # self.viz.draw('real images', right_images.data.cpu().numpy()[:64] * 128 + 128)
+
+        fake_images_plt_1 = np.concatenate(np.split(fake_images.data.cpu().numpy()[:64],fake_images.data.cpu().numpy()[:64].shape[0],axis=0),axis=3)
+        print(fake_images_plt_1.shape)
+
+        fake_images_plt = np.transpose(np.reshape(np.concatenate(np.split(fake_images_plt_1,8,axis=3),axis=2),(3,512,512)),(1,2,0))
+        print(fake_images_plt.shape)
+        plt.imsave('models/birds/fake_images_'+str(epoch)+'.png',fake_images_plt)
+        # plt.savefig('models/birds/fake_images'+epoch+'.pdf')
+
+        right_images_plt_1 = np.concatenate(np.split(right_images.data.cpu().numpy()[:64],right_images.data.cpu().numpy()[:64].shape[0],axis=0),axis=3)
+        print(right_images_plt_1.shape)
+
+        right_images_plt = np.transpose(np.reshape(np.concatenate(np.split(right_images_plt_1,8,axis=3),axis=2),(3,512,512)),(1,2,0))
+        print(right_images_plt.shape)
+        # plt.plot(right_images_plt)
+        plt.imsave('models/birds/real_images_'+str(epoch)+'.png',right_images_plt)
+
+
+        raise KeyboardInterrupt
+
+
+
+
