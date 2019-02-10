@@ -44,14 +44,14 @@ for _class in sorted(os.listdir(embedding_path)):
 		#print(example_data)
 		img_path = example_data[b'img']
 		embeddings = example_data[b'txt']
-		example_name = img_path.split('/')[-1][:-4]
+		example_name = str(img_path).split('/')[-1][:-4]
 
-		f = open(txt_file, "r")
+		f = open(txt_file, "r", encoding = 'utf-8')
 		txt = f.readlines()
 		f.close()
-
-		img_path = str(os.path.join(images_path, img_path).encode('utf-8'))
-		img = open(img_path, 'r').read()
+		#print(img_path.decode("utf-8"))
+		img_path = os.path.join(images_path, img_path.decode('utf-8')).encode('utf-8')
+		img = open(img_path, 'rb').read()
 
 		txt_choice = np.random.choice(range(10), 5)
 

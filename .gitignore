@@ -5,3 +5,5 @@ dataset/*
 .idea/
 checkpoints/*
 results/*
+models/birds/*
+slurm*
