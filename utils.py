@@ -115,9 +115,9 @@ class Logger(object):
         self.hist_D.append(d_loss.data.cpu().mean())
         self.hist_G.append(g_loss.data.cpu().mean())
 
-    def log_iteration_gan(self, epoch, d_loss, g_loss, real_score, fake_score):
-        print("Epoch: %d, d_loss= %f, g_loss= %f, D(X)= %f, D(G(X))= %f" % (
-            epoch, d_loss.data.cpu().mean(), g_loss.data.cpu().mean(), real_score.data.cpu().mean(),
+    def log_iteration_gan(self, epoch, iteration, d_loss, g_loss, real_score, fake_score):
+        print("Epoch: %d, iteration= %d, d_loss= %f, g_loss= %f, D(X)= %f, D(G(X))= %f" % (
+            epoch, iteration, d_loss.data.cpu().mean(), g_loss.data.cpu().mean(), real_score.data.cpu().mean(),
             fake_score.data.cpu().mean()))
         self.hist_D.append(d_loss.data.cpu().mean())
         self.hist_G.append(g_loss.data.cpu().mean())
@@ -127,18 +127,33 @@ class Logger(object):
     def plot_epoch(self, epoch):
         #self.viz.plot('Discriminator', 'train', epoch, np.array(self.hist_D).mean())
         #self.viz.plot('Generator', 'train', epoch, np.array(self.hist_G).mean())
-        self.hist_D = []
-        self.hist_G = []
+        #self.hist_D = []
+        #self.hist_G = []
+        fig_1 = plt.figure(figsize=(8, 4))
+        ax_1 = fig_1.add_subplot(111)
+        print(self.hist_D)
+        ax_1.plot(epoch, np.array(self.hist_D).mean())
+        ax_1.legend('train')
+        ax_1.set_title('Discriminator')
+        fig_1.savefig('/home/s1819116/Text-to-Image-Synthesis/models/birds/Discriminator_train.pdf')
+
+        fig_2 = plt.figure(figsize=(8, 4))
+        ax_2 = fig_2.add_subplot(111)
+        print(self.hist_G)
+        ax_2.plot(epoch, np.array(self.hist_G).mean())
+        ax_2.legend('train')
+        ax_2.set_title('Generator')
+        fig_2.savefig('/home/s1819116/Text-to-Image-Synthesis/models/birds/Generator_train.pdf')
 
     def plot_epoch_w_scores(self, epoch):
         #self.viz.plot('Discriminator', 'train', epoch, np.array(self.hist_D).mean())
         #self.viz.plot('Generator', 'train', epoch, np.array(self.hist_G).mean())
         #self.viz.plot('D(X)', 'train', epoch, np.array(self.hist_Dx).mean())
         #self.viz.plot('D(G(X))', 'train', epoch, np.array(self.hist_DGx).mean())
-        self.hist_D = []
-        self.hist_G = []
-        self.hist_Dx = []
-        self.hist_DGx = []
+        #self.hist_D = []
+        #self.hist_G = []
+        #self.hist_Dx = []
+        #self.hist_DGx = []
 
     # Plot the change in the Discriminator and generator error over training.
         fig_1 = plt.figure(figsize=(8, 4))
@@ -172,6 +187,11 @@ class Logger(object):
     def draw(self, right_images, fake_images,epoch):
         #self.viz.draw('generated images', fake_images.data.cpu().numpy()[:64] * 128 + 128)
         #self.viz.draw('real images', right_images.data.cpu().numpy()[:64] * 128 + 128)
+        if np.shape(fake_images.data.cpu().numpy()[:64])[0] < 64:
+            fake_images.data.cpu().numpy()[:64] = np.concatenate((fake_images.data.cpu().numpy()[:64],np.zeros(64-np.np.shape(fake_images.data.cpu().numpy()[:64])[0],3,64,64)),axis=0)
+        if np.shape(right_images.data.cpu().numpy()[:64])[0] < 64:
+            right_images.data.cpu().numpy()[:64] = np.concatenate((right_images.data.cpu().numpy()[:64],np.zeros(64-np.np.shape(right_images.data.cpu().numpy()[:64])[0],3,64,64)),axis=0)
+
         fake_images_plt_1 = np.concatenate(np.split(fake_images.data.cpu().numpy()[:64],fake_images.data.cpu().numpy()[:64].shape[0],axis=0),axis=3)
         fake_images_plt = np.transpose(np.reshape(np.concatenate(np.split(fake_images_plt_1,8,axis=3),axis=2),(3,512,512)),(1,2,0))
         plt.imsave('/home/s1819116/Text-to-Image-Synthesis/models/birds/fake_images_'+str(epoch)+'.png',(fake_images_plt*128+128).astype(np.uint8))
