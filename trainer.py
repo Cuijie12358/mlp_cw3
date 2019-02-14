@@ -13,7 +13,7 @@ import os
 
 class Trainer(object):
     def __init__(self, type, dataset, split, lr, diter, vis_screen, save_path, l1_coef, l2_coef, pre_trained_gen, pre_trained_disc, batch_size, num_workers, epochs):
-        with open('/home/s1819116/Text-to-Image-Synthesis/config.yaml', 'r') as f:
+        with open('/home/cuijie/mlp_cw3/config.yaml', 'r') as f:
             config = yaml.load(f)
 
         self.generator = torch.nn.DataParallel(gan_factory.generator_factory(type).cuda())
@@ -418,6 +418,7 @@ class Trainer(object):
                 Utils.save_checkpoint(self.discriminator, self.generator, self.checkpoints_path, epoch)
 
     def predict(self):
+        epoch = -1
         for sample in self.data_loader:
             right_images = sample['right_images']
             right_embed = sample['right_embed']
@@ -428,12 +429,12 @@ class Trainer(object):
 
             right_images = Variable(right_images.float()).cuda()
             right_embed = Variable(right_embed.float()).cuda()
-
+        
             # Train the generator
             noise = Variable(torch.randn(right_images.size(0), 100)).cuda()
             noise = noise.view(noise.size(0), 100, 1, 1)
             fake_images = self.generator(right_embed, noise)
-
+            print(fake_images.shape)
             self.logger.draw(right_images, fake_images,epoch)
 
             for image, t in zip(fake_images, txt):
